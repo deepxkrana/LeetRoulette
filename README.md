@@ -2,7 +2,7 @@
 
 A sleek, minimalist tool to help you pick LeetCode problems at random, built with React and Vite. Say goodbye to decision fatigue and let the roulette decide your next coding challenge!
 
-![LeetRoulette Screenshot](./public/screenshot.png) <!-- Note: Add a screenshot of the app here -->
+![LeetRoulette Screenshot](./public/LeetRoulette.png) <!-- Note: Add a screenshot of the app here -->
 
 ## Features
 
