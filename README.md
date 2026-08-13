@@ -25,6 +25,9 @@ Want to practice only the problems you've actually solved or seen? You can extra
 6. Open LeetRoulette, click the **Settings icon (⚙)** at the bottom, and upload your JSON file.
 
 Your data is saved locally in your browser's `localStorage`, so you only need to upload it once!
+But!!! since it's static and fetches data from a static file so you need to re fetch data from leetcode using the provided script and reupload the file again for every new questions solved.. This is because Leetcode does not provide public API for fetching data.
+
+I am working on a way dynamically update the data. So please stay tuned!!!
 
 ## Development
 
