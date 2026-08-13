@@ -401,7 +401,7 @@ function App() {
               <div className="drawer-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 Settings
                 {isDemoMode ? (
-                  <span style={{ fontSize: '0.75rem', background: 'rgba(255,255,255,0.1)', padding: '4px 8px', borderRadius: '4px' }}>Demo Data</span>
+                  <span style={{ fontSize: '0.75rem', background: 'rgba(255,255,255,0.1)', padding: '4px 8px', borderRadius: '4px' }}>All Questions Mode</span>
                 ) : (
                   <span style={{ fontSize: '0.75rem', background: 'rgba(34, 197, 94, 0.2)', color: '#4ade80', padding: '4px 8px', borderRadius: '4px' }}>Custom Data Active</span>
                 )}
@@ -432,7 +432,7 @@ function App() {
                 {isDemoMode ? (
                   <>
                     <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)', lineHeight: 1.5 }}>
-                      You are currently viewing demo data. To use your own solved problems:
+                      You are currently viewing All Questions Mode. To use your own solved problems:
                     </p>
                     <ol style={{ fontSize: '0.75rem', color: 'var(--text-dim)', lineHeight: 1.6, paddingLeft: '20px', margin: 0 }}>
                       <li>Go to <a href="https://leetcode.com" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>leetcode.com</a> and log in.</li>
