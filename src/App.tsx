@@ -188,7 +188,7 @@ function App() {
 
   const diffLabel = current
     ? current.difficulty.toUpperCase() +
-      (current.topics.length > 0 ? ` · ${current.topics[0].toUpperCase()}` : "")
+    (current.topics.length > 0 ? ` · ${current.topics[0].toUpperCase()}` : "")
     : "";
 
   return (
@@ -199,18 +199,18 @@ function App() {
         {/* Header */}
         <div className="header">
           <div className="logo">LeetRoulette</div>
-          
+
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '-6px', fontSize: '0.75rem', color: 'var(--text-dim)' }}>
             made by
-            <a 
-              href="https://instagram.com/deepxkrana" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              style={{ 
-                display: 'flex', alignItems: 'center', gap: '4px', 
-                padding: '4px 10px', borderRadius: '100px', 
-                border: '1px solid var(--border)', color: 'var(--text)', 
-                textDecoration: 'none', background: 'rgba(255,255,255,0.02)', 
+            <a
+              href="https://instagram.com/deepxkrana"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex', alignItems: 'center', gap: '4px',
+                padding: '4px 10px', borderRadius: '100px',
+                border: '1px solid var(--border)', color: 'var(--text)',
+                textDecoration: 'none', background: 'rgba(255,255,255,0.02)',
                 transition: 'background 0.2s',
                 fontFamily: 'var(--sans)'
               }}
@@ -428,7 +428,7 @@ function App() {
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div style={{ fontSize: '0.9rem', fontWeight: 600 }}>Your LeetCode Data</div>
-                
+
                 {isDemoMode ? (
                   <>
                     <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)', lineHeight: 1.5 }}>
@@ -460,7 +460,7 @@ function App() {
                       Upload new data
                       <input type="file" accept=".json" style={{ display: 'none' }} onChange={handleFileUpload} />
                     </label>
-                    <button 
+                    <button
                       onClick={handleClearData}
                       style={{
                         flex: 1, padding: '10px', border: '1px solid rgba(255, 0, 0, 0.3)', borderRadius: '8px',
@@ -506,23 +506,23 @@ function App() {
                   By default, it loads all 4,000+ public questions from LeetCode. You can filter the pool by <strong>Difficulty</strong> or specific <strong>Topics</strong> using the dropdowns at the top.
                 </p>
                 <p>
-                  <strong style={{ color: 'var(--text)' }}>Want to practice your own solved problems?</strong><br/>
+                  <strong style={{ color: 'var(--text)' }}>Want to practice your own solved problems?</strong><br />
                   Click the Settings icon (⚙) to find instructions on how to generate and upload a JSON file containing only your personal LeetCode history. Once uploaded, your data stays saved in your browser locally! <strong>Note: You need to upload a new file every time you solve a new question on LeetCode. Else the newly solved Question won't appear in the list.</strong>
                 </p>
                 <p>
-                  <strong style={{ color: 'var(--text)' }}>Prioritize unseen problems:</strong><br/>
+                  <strong style={{ color: 'var(--text)' }}>Prioritize unseen problems:</strong><br />
                   When enabled in settings, the wheel will heavily favor problems it hasn't landed on yet during this session, helping you cycle through your backlog.
                 </p>
                 <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'center' }}>
-                  <a 
-                    href="https://github.com/deepxkrana" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    style={{ 
-                      display: 'flex', alignItems: 'center', gap: '6px', 
-                      padding: '6px 12px', borderRadius: '8px', 
-                      color: 'var(--text)', textDecoration: 'none', 
-                      background: 'rgba(255,255,255,0.03)', 
+                  <a
+                    href="https://github.com/deepxkrana"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                      padding: '6px 12px', borderRadius: '8px',
+                      color: 'var(--text)', textDecoration: 'none',
+                      background: 'rgba(255,255,255,0.03)',
                       transition: 'background 0.2s',
                       fontSize: '0.85rem'
                     }}
@@ -578,7 +578,7 @@ function App() {
                 Are you sure you want to clear your uploaded LeetCode history and return to All Questions Mode? You'll need to upload a new JSON file to use your custom data again.
               </div>
               <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
-                <button 
+                <button
                   onClick={() => setShowClearConfirm(false)}
                   style={{
                     flex: 1, padding: '10px', borderRadius: '8px',
@@ -588,7 +588,7 @@ function App() {
                   }}>
                   Cancel
                 </button>
-                <button 
+                <button
                   onClick={confirmClear}
                   style={{
                     flex: 1, padding: '10px', borderRadius: '8px',
