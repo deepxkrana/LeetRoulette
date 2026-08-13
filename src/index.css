@@ -72,7 +72,7 @@ body {
 
 .logo {
   font-family: var(--serif);
-  font-size: 1.6rem;
+  font-size: 2.4rem;
   font-weight: 600;
   font-style: italic;
   letter-spacing: -0.02em;
@@ -221,8 +221,8 @@ body {
 }
 
 .btn-icon {
-  width: 42px;
-  height: 42px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: transparent;
@@ -232,7 +232,7 @@ body {
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 0.85rem;
+  font-size: 1.5rem;
 }
 
 .btn-icon:hover {

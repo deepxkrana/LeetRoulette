@@ -15,6 +15,7 @@ function App() {
   const [phase, setPhase] = useState<SpinPhase>("idle");
   const [key, setKey] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const [isDemoMode, setIsDemoMode] = useState(true);
 
   const [filters, setFilters] = useState<FilterState>({
@@ -172,8 +173,35 @@ function App() {
         {/* Header */}
         <div className="header">
           <div className="logo">LeetRoulette</div>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '-6px', fontSize: '0.75rem', color: 'var(--text-dim)' }}>
+            made by
+            <a 
+              href="https://instagram.com/deepxkrana" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              style={{ 
+                display: 'flex', alignItems: 'center', gap: '4px', 
+                padding: '4px 10px', borderRadius: '100px', 
+                border: '1px solid var(--border)', color: 'var(--text)', 
+                textDecoration: 'none', background: 'rgba(255,255,255,0.02)', 
+                transition: 'background 0.2s',
+                fontFamily: 'var(--sans)'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+              @deepxkrana
+            </a>
+          </div>
+
           {isDemoMode && (
-            <div style={{ fontSize: "0.75rem", color: "var(--accent)", letterSpacing: "0.05em", textTransform: "uppercase", marginTop: "-4px" }}>
+            <div style={{ fontSize: "0.7rem", color: "var(--accent)", letterSpacing: "0.05em", textTransform: "uppercase", marginTop: "4px" }}>
               All Questions Mode
             </div>
           )}
@@ -268,6 +296,9 @@ function App() {
 
           <button className="btn-icon" onClick={() => setShowSettings(true)} aria-label="Settings">
             ⚙
+          </button>
+          <button className="btn-icon" onClick={() => setShowInfo(true)} aria-label="Info">
+            ⓘ
           </button>
         </div>
       </div>
@@ -364,6 +395,48 @@ function App() {
                     </button>
                   </div>
                 )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Info drawer */}
+      <AnimatePresence>
+        {showInfo && (
+          <>
+            <motion.div
+              className="drawer-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowInfo(false)}
+            />
+            <motion.div
+              className="drawer"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              <div className="drawer-handle" />
+              <div className="drawer-title" style={{ fontSize: '1.4rem', color: 'var(--accent)' }}>About LeetRoulette</div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', color: 'var(--text-dim)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                <p>
+                  <strong>LeetRoulette</strong> is a minimalist tool to help you pick LeetCode problems at random.
+                </p>
+                <p>
+                  By default, it loads all 4,000+ public questions from LeetCode. You can filter the pool by <strong>Difficulty</strong> or specific <strong>Topics</strong> using the dropdowns at the top.
+                </p>
+                <p>
+                  <strong style={{ color: 'var(--text)' }}>Want to practice your own solved problems?</strong><br/>
+                  Click the Settings icon (⚙) to find instructions on how to generate and upload a JSON file containing only your personal LeetCode history. Once uploaded, your data stays saved in your browser locally!
+                </p>
+                <p>
+                  <strong style={{ color: 'var(--text)' }}>Prioritize unseen problems:</strong><br/>
+                  When enabled in settings, the wheel will heavily favor problems it hasn't landed on yet during this session, helping you cycle through your backlog.
+                </p>
               </div>
             </motion.div>
           </>
