@@ -507,7 +507,7 @@ function App() {
                 </p>
                 <p>
                   <strong style={{ color: 'var(--text)' }}>Want to practice your own solved problems?</strong><br/>
-                  Click the Settings icon (⚙) to find instructions on how to generate and upload a JSON file containing only your personal LeetCode history. Once uploaded, your data stays saved in your browser locally!
+                  Click the Settings icon (⚙) to find instructions on how to generate and upload a JSON file containing only your personal LeetCode history. Once uploaded, your data stays saved in your browser locally! <strong>Note: You need to upload a new file every time you solve a new question on LeetCode. Else the newly solved Question won't appear in the list.</strong>
                 </p>
                 <p>
                   <strong style={{ color: 'var(--text)' }}>Prioritize unseen problems:</strong><br/>
