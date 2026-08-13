@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { SolvedProblem, FilterState, Difficulty } from "./types";
 import { selectRandom, extractAllTopics, filterProblems } from "./utils/selectRandom";
 import { loadUserData, saveUserData, clearUserData } from "./utils/storage";
+import { playTick, playLand } from "./utils/sound";
 
 type SpinPhase = "idle" | "spinning" | "landing";
 
@@ -16,7 +17,9 @@ function App() {
   const [key, setKey] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [isDemoMode, setIsDemoMode] = useState(true);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const [filters, setFilters] = useState<FilterState>({
     difficulties: [],
@@ -57,6 +60,19 @@ function App() {
     setProblems(filterProblems(allProblems, filters.difficulties, filters.topics));
   }, [allProblems, filters]);
 
+  // Close dropdown on outside click
+  useEffect(() => {
+    if (!openDropdown) return;
+    const handler = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest(".dropdown")) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [openDropdown]);
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -83,12 +99,15 @@ function App() {
   };
 
   const handleClearData = () => {
-    if (confirm("Are you sure you want to clear your local data and return to Demo Mode?")) {
-      clearUserData();
-      setCurrent(null);
-      loadDefaultData();
-      setShowSettings(false);
-    }
+    setShowClearConfirm(true);
+  };
+
+  const confirmClear = () => {
+    clearUserData();
+    setCurrent(null);
+    loadDefaultData();
+    setShowSettings(false);
+    setShowClearConfirm(false);
   };
 
   const withStats = useCallback(
@@ -116,11 +135,15 @@ function App() {
 
     setPhase("spinning");
     let tick = 0;
-    const total = 12;
-    let delay = 50;
+    const total = 16;
+    let delay = 45;
 
     const next = () => {
       tick++;
+      // Pitch rises as we slow down (0→1)
+      const progress = tick / total;
+      playTick(progress * 0.6);
+
       if (tick >= total) {
         const ex = statsRef.current.get(final.questionId) ?? {
           times_shown: final.times_shown,
@@ -134,15 +157,18 @@ function App() {
         setLastId(final.questionId);
         setKey((k) => k + 1);
         setPhase("landing");
-        setTimeout(() => setPhase("idle"), 500);
+        playLand();
+        setTimeout(() => setPhase("idle"), 600);
       } else {
         setCurrent(problems[Math.floor(Math.random() * problems.length)]);
         setKey((k) => k + 1);
-        delay *= 1.2;
+        // Exponential slow-down: starts fast, slows dramatically
+        delay *= 1.12 + progress * 0.12;
         setTimeout(next, delay);
       }
     };
 
+    playTick(0);
     setCurrent(problems[Math.floor(Math.random() * problems.length)]);
     setKey((k) => k + 1);
     setTimeout(next, delay);
@@ -157,8 +183,8 @@ function App() {
 
   const transition =
     phase === "landing"
-      ? { type: "spring" as const, stiffness: 100, damping: 18, mass: 0.8 }
-      : { duration: 0.1, ease: "easeOut" as const };
+      ? { type: "spring" as const, stiffness: 80, damping: 14, mass: 1 }
+      : { duration: 0.12, ease: [0.25, 0.1, 0.25, 1] as const };
 
   const diffLabel = current
     ? current.difficulty.toUpperCase() +
@@ -200,38 +226,88 @@ function App() {
             </a>
           </div>
 
-          {isDemoMode && (
-            <div style={{ fontSize: "0.7rem", color: "var(--accent)", letterSpacing: "0.05em", textTransform: "uppercase", marginTop: "4px" }}>
-              All Questions Mode
+          <div style={{ fontSize: "0.7rem", color: isDemoMode ? "var(--accent)" : "#4ade80", letterSpacing: "0.05em", textTransform: "uppercase", marginTop: "4px" }}>
+            {isDemoMode ? "All Questions Mode" : "Custom Mode"}
+          </div>
+          <div className="filter-row" style={{ marginTop: "8px", display: "flex", gap: "8px" }}>
+            {/* Difficulty Dropdown */}
+            <div className="dropdown">
+              <button
+                className={`dropdown-trigger ${openDropdown === "diff" ? "open" : ""}`}
+                onClick={() => setOpenDropdown(openDropdown === "diff" ? null : "diff")}
+              >
+                {filters.difficulties[0] || "All Difficulties"}
+                <span className="dropdown-chevron">▼</span>
+              </button>
+              <AnimatePresence>
+                {openDropdown === "diff" && (
+                  <motion.div
+                    className="dropdown-panel"
+                    initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                  >
+                    {["", "Easy", "Medium", "Hard"].map((d) => (
+                      <button
+                        key={d || "all"}
+                        className={`dropdown-item ${(filters.difficulties[0] || "") === d ? "active" : ""}`}
+                        onClick={() => {
+                          setFilters((f) => ({ ...f, difficulties: d ? [d as Difficulty] : [] }));
+                          setOpenDropdown(null);
+                        }}
+                      >
+                        {d || "All Difficulties"}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          )}
-          <div className="filter-row" style={{ marginTop: "8px" }}>
-            <select
-              className="pill-select"
-              value={filters.difficulties[0] || ""}
-              onChange={(e) => {
-                const v = e.target.value;
-                setFilters((f) => ({ ...f, difficulties: v ? [v as Difficulty] : [] }));
-              }}
-            >
-              <option value="">All Difficulties</option>
-              <option value="Easy">Easy</option>
-              <option value="Medium">Medium</option>
-              <option value="Hard">Hard</option>
-            </select>
-            <select
-              className="pill-select"
-              value={filters.topics[0] || ""}
-              onChange={(e) => {
-                const v = e.target.value;
-                setFilters((f) => ({ ...f, topics: v ? [v] : [] }));
-              }}
-            >
-              <option value="">All Topics</option>
-              {topics.map((t) => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </select>
+
+            {/* Topics Dropdown */}
+            <div className="dropdown">
+              <button
+                className={`dropdown-trigger ${openDropdown === "topic" ? "open" : ""}`}
+                onClick={() => setOpenDropdown(openDropdown === "topic" ? null : "topic")}
+              >
+                {filters.topics[0] || "All Topics"}
+                <span className="dropdown-chevron">▼</span>
+              </button>
+              <AnimatePresence>
+                {openDropdown === "topic" && (
+                  <motion.div
+                    className="dropdown-panel"
+                    initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                  >
+                    <button
+                      className={`dropdown-item ${filters.topics.length === 0 ? "active" : ""}`}
+                      onClick={() => {
+                        setFilters((f) => ({ ...f, topics: [] }));
+                        setOpenDropdown(null);
+                      }}
+                    >
+                      All Topics
+                    </button>
+                    {topics.map((t) => (
+                      <button
+                        key={t}
+                        className={`dropdown-item ${filters.topics[0] === t ? "active" : ""}`}
+                        onClick={() => {
+                          setFilters((f) => ({ ...f, topics: [t] }));
+                          setOpenDropdown(null);
+                        }}
+                      >
+                        {t}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
 
@@ -391,7 +467,7 @@ function App() {
                         cursor: 'pointer', fontSize: '0.8rem', color: '#ff6b6b', textAlign: 'center',
                         background: 'rgba(255, 0, 0, 0.05)'
                       }}>
-                      Clear Data (Demo Mode)
+                      Clear Data (All Questions Mode)
                     </button>
                   </div>
                 )}
@@ -437,9 +513,94 @@ function App() {
                   <strong style={{ color: 'var(--text)' }}>Prioritize unseen problems:</strong><br/>
                   When enabled in settings, the wheel will heavily favor problems it hasn't landed on yet during this session, helping you cycle through your backlog.
                 </p>
+                <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'center' }}>
+                  <a 
+                    href="https://github.com/deepxkrana" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    style={{ 
+                      display: 'flex', alignItems: 'center', gap: '6px', 
+                      padding: '6px 12px', borderRadius: '8px', 
+                      color: 'var(--text)', textDecoration: 'none', 
+                      background: 'rgba(255,255,255,0.03)', 
+                      transition: 'background 0.2s',
+                      fontSize: '0.85rem'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                    </svg>
+                    @deepxkrana
+                  </a>
+                </div>
               </div>
             </motion.div>
           </>
+        )}
+      </AnimatePresence>
+
+      {/* Clear Confirmation Modal */}
+      <AnimatePresence>
+        {showClearConfirm && (
+          <motion.div
+            className="drawer-overlay"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowClearConfirm(false)}
+          >
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              style={{
+                background: '#1a1d1b',
+                border: '1px solid var(--border)',
+                borderRadius: '16px',
+                padding: '24px',
+                width: '90%',
+                maxWidth: '400px',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px'
+              }}
+            >
+              <div style={{ fontSize: '1.2rem', fontWeight: 600, color: 'var(--text)' }}>
+                Clear local data?
+              </div>
+              <div style={{ fontSize: '0.9rem', color: 'var(--text-dim)', lineHeight: 1.5 }}>
+                Are you sure you want to clear your uploaded LeetCode history and return to All Questions Mode? You'll need to upload a new JSON file to use your custom data again.
+              </div>
+              <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+                <button 
+                  onClick={() => setShowClearConfirm(false)}
+                  style={{
+                    flex: 1, padding: '10px', borderRadius: '8px',
+                    cursor: 'pointer', fontSize: '0.9rem', color: 'var(--text)',
+                    background: 'rgba(255,255,255,0.05)', border: 'none',
+                    fontFamily: 'var(--sans)', fontWeight: 500
+                  }}>
+                  Cancel
+                </button>
+                <button 
+                  onClick={confirmClear}
+                  style={{
+                    flex: 1, padding: '10px', borderRadius: '8px',
+                    cursor: 'pointer', fontSize: '0.9rem', color: '#ff6b6b',
+                    background: 'rgba(255, 0, 0, 0.1)', border: 'none',
+                    fontFamily: 'var(--sans)', fontWeight: 500
+                  }}>
+                  Clear Data
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

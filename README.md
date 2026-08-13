@@ -1,32 +1,58 @@
-# React + TypeScript + Vite
+# LeetRoulette
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A sleek, minimalist tool to help you pick LeetCode problems at random, built with React and Vite. Say goodbye to decision fatigue and let the roulette decide your next coding challenge!
 
-Currently, two official plugins are available:
+![LeetRoulette Screenshot](./public/screenshot.png) <!-- Note: Add a screenshot of the app here -->
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Sleek Interface**: Ultra-minimalist, dark-mode aesthetic with satisfying animations powered by `framer-motion`.
+- **All Questions Mode**: By default, it loads a comprehensive pool of 4,000+ public LeetCode questions.
+- **Custom Data Mode**: Upload a JSON file of your own solved LeetCode problems to practice exactly what you need.
+- **Smart Filtering**: Filter the question pool by specific **Difficulties** (Easy, Medium, Hard) or **Topics** (Arrays, Two Pointers, Dynamic Programming, etc.).
+- **Prioritize Unseen**: Toggle an option in settings to heavily favor problems the roulette hasn't landed on yet during your current session.
+- **Satisfying Sounds**: Features custom Web Audio API-generated percussive clicks and a chime when the wheel lands.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## How to use Custom Data
 
-## Expanding the Oxlint configuration
+Want to practice only the problems you've actually solved or seen? You can extract your own data directly from LeetCode and upload it to LeetRoulette:
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+1. Go to [leetcode.com](https://leetcode.com) and log in to your account.
+2. Open your browser's **Developer Tools** (usually `F12` or `Cmd+Option+J`).
+3. Navigate to the **Console** tab.
+4. Copy the entire contents of the [`public/extract_leetcode.js`](./public/extract_leetcode.js) script found in this repository.
+5. Paste it into the console and hit Enter. This will extract your solved problems and automatically download a `solved_problems.json` file.
+6. Open LeetRoulette, click the **Settings icon (⚙)** at the bottom, and upload your JSON file.
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+Your data is saved locally in your browser's `localStorage`, so you only need to upload it once!
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Development
+
+This project is built using:
+- **React 18**
+- **Vite**
+- **TypeScript**
+- **Framer Motion** (for animations)
+
+### Running Locally
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/deepxkrana/LeetRoulette.git
+   ```
+2. Navigate into the directory:
+   ```bash
+   cd LeetRoulette
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## Author
+
+Made by [@deepxkrana](https://github.com/deepxkrana) | [Instagram](https://instagram.com/deepxkrana)
