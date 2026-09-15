@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   openAppBtn.addEventListener("click", () => {
     chrome.tabs.query({}, (tabs) => {
-      const existingTab = tabs.find(t => t.url && (t.url.includes("localhost:5173") || t.url.includes("leet-roulette.vercel.app") || t.url.includes("leetroulette.com")));
+      const existingTab = tabs.find(t => t.url && (t.url.includes("localhost:5173") || t.url.includes("leetroulette.vercel.app") || t.url.includes("leetroulette.com")));
       if (existingTab) {
         // Just reload the tab since the background script might have already injected data, 
         // or we rely on the content script executing on reload
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chrome.tabs.update(existingTab.id, { active: true });
         chrome.windows.update(existingTab.windowId, { focused: true });
       } else {
-        chrome.tabs.create({ url: "http://localhost:5173" });
+        chrome.tabs.create({ url: "https://leetroulette.vercel.app/" });
       }
     });
   });
