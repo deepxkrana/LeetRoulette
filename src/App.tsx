@@ -58,10 +58,6 @@ function App() {
     };
     
     loadData();
-
-    const handleSync = () => loadData();
-    window.addEventListener('leetroulette-sync-update', handleSync);
-    return () => window.removeEventListener('leetroulette-sync-update', handleSync);
   }, [loadDefaultData]);
 
   useEffect(() => {

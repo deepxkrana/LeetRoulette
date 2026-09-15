@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     chrome.tabs.query({}, (tabs) => {
       const existingTab = tabs.find(t => t.url && (t.url.includes("localhost:5173") || t.url.includes("leetroulette.vercel.app") || t.url.includes("leetroulette.com")));
       if (existingTab) {
-        // Just focus the tab, the content script handles live updates without reloading
+        chrome.tabs.reload(existingTab.id);
         chrome.tabs.update(existingTab.id, { active: true });
         chrome.windows.update(existingTab.windowId, { focused: true });
       } else {
