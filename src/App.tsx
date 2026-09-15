@@ -432,13 +432,19 @@ function App() {
                 {isDemoMode ? (
                   <>
                     <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)', lineHeight: 1.5 }}>
-                      You are currently viewing All Questions Mode. To use your own solved problems:
+                      You are currently viewing All Questions Mode. To automatically sync your own solved problems from LeetCode, use our Chrome Extension:
                     </p>
+                    <a href="/leetroulette-sync.zip" download style={{
+                      display: 'block', textAlign: 'center', padding: '12px', background: 'var(--accent)', color: '#000', 
+                      borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none', margin: '8px 0'
+                    }}>
+                      Download Chrome Extension
+                    </a>
                     <ol style={{ fontSize: '0.75rem', color: 'var(--text-dim)', lineHeight: 1.6, paddingLeft: '20px', margin: 0 }}>
-                      <li>Go to <a href="https://leetcode.com" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>leetcode.com</a> and log in.</li>
-                      <li>Open Developer Tools (F12) ➔ Console.</li>
-                      <li>Paste <a href="/extract_leetcode.js" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>this extraction script</a> and hit Enter.</li>
-                      <li>Upload the downloaded JSON file below!</li>
+                      <li>Unzip the downloaded file.</li>
+                      <li>Go to <code>chrome://extensions</code> and turn on <strong>Developer mode</strong>.</li>
+                      <li>Click <strong>Load unpacked</strong> and select the unzipped folder.</li>
+                      <li>Click the new extension icon to sync your data!</li>
                     </ol>
                     <label style={{
                       display: 'flex', justifyContent: 'center', alignItems: 'center',
