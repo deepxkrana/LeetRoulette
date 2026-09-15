@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         chrome.tabs.create({ url: "https://leetroulette.vercel.app/" });
       }
+      window.close();
     });
   });
 
