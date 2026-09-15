@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>LeetRoulette Sync</h2>
+    </div>
+    <div class="content">
+      <p id="status-text">Click below to securely sync your solved problems directly from LeetCode.</p>
+      
+      <div id="progress-container" class="hidden">
+        <div class="progress-bar">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+        <p id="progress-detail">Initializing...</p>
+      </div>
+
+      <button id="sync-btn" class="btn">Sync Data</button>
+      <button id="open-app-btn" class="btn btn-secondary hidden">Open LeetRoulette</button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

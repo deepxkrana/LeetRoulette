@@ -15,19 +15,25 @@ A sleek, minimalist tool to help you pick LeetCode problems at random, built wit
 
 ## How to use Custom Data
 
-Want to practice only the problems you've actually solved or seen? You can extract your own data directly from LeetCode and upload it to LeetRoulette:
+Want to practice only the problems you've actually solved or seen? We've built a companion Chrome Extension that securely fetches your solved problems directly from LeetCode and instantly syncs them to LeetRoulette with one click!
 
-1. Go to [leetcode.com](https://leetcode.com) and log in to your account.
-2. Open your browser's **Developer Tools** (usually `F12` or `Cmd+Option+J`).
-3. Navigate to the **Console** tab.
-4. Copy the entire contents of the [`public/extract_leetcode.js`](./public/extract_leetcode.js) script found in this repository.
-5. Paste it into the console and hit Enter. This will extract your solved problems and automatically download a `solved_problems.json` file.
-6. Open LeetRoulette, click the **Settings icon (⚙)** at the bottom, and upload your JSON file.
+### Installing the Extension (Developer Mode)
 
-Your data is saved locally in your browser's `localStorage`, so you only need to upload it once!
-But!!! since it's static and fetches data from a static file so you need to re fetch data from leetcode using the provided script and reupload the file again for every new questions solved.. This is because Leetcode does not provide public API for fetching data.
+Since the extension isn't on the Chrome Web Store yet, you can load it manually:
 
-I am working on a way to dynamically update the data. So please stay tuned!!!
+1. Download or clone this repository.
+2. Open Chrome and navigate to `chrome://extensions`.
+3. Turn on **Developer mode** (toggle in the top right corner).
+4. Click **Load unpacked** in the top left.
+5. Select the `extension/` folder located inside this repository.
+6. The "LeetRoulette Sync" extension is now installed! Pin it to your toolbar for easy access.
+
+### Syncing your Data
+
+1. Make sure you are logged into your account on [leetcode.com](https://leetcode.com).
+2. Click the **LeetRoulette Sync** extension icon in your toolbar.
+3. Click **Sync Data**. The extension will securely fetch your solved problems (this might take a minute if you have hundreds of problems).
+4. Once complete, click **Open LeetRoulette**. The web app will automatically open in Custom Mode with all your data instantly available!
 
 ## Development
 
