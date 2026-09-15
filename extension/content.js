@@ -19,3 +19,8 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     );
   }
 });
+
+// Listen for the clear data event from the web app
+window.addEventListener('leetroulette-clear-data', () => {
+  chrome.storage.local.remove('leetroulette_user_data');
+});

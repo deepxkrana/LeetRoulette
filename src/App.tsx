@@ -108,6 +108,7 @@ function App() {
 
   const confirmClear = () => {
     clearUserData();
+    window.dispatchEvent(new CustomEvent('leetroulette-clear-data'));
     setCurrent(null);
     loadDefaultData();
     setShowSettings(false);
