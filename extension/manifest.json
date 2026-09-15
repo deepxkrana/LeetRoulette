@@ -5,7 +5,8 @@
   "description": "Securely syncs your solved LeetCode problems directly into LeetRoulette.",
   "permissions": [
     "storage",
-    "cookies"
+    "cookies",
+    "tabs"
   ],
   "host_permissions": [
     "*://leetcode.com/*"

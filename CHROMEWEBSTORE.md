@@ -49,6 +49,7 @@ Make sure you take at least one high-resolution screenshot (1280x800) of the ext
 |------------|------|---------------|
 | `storage` | permissions | Required to temporarily save the user's solved LeetCode problems locally in the browser so they can be injected into the LeetRoulette web application. |
 | `cookies` | permissions | Required to read the user's `csrftoken` cookie from leetcode.com, which is strictly necessary to authenticate the GraphQL requests to fetch their solved problems. |
+| `tabs` | permissions | Required to read the URLs of open browser tabs so the extension can detect if the LeetRoulette web application is already open, preventing duplicate tabs from opening. |
 | `*://leetcode.com/*` | host_permissions | Required to make secure GraphQL requests to LeetCode's servers on behalf of the user to fetch their solved problems. |
 
 ## Privacy & Data Use
