@@ -119,6 +119,21 @@ async function startSyncProcess() {
     return;
   }
 
+  syncStatus = { type: "SYNC_PROGRESS", percent: 60, detail: "Loading metadata database..." };
+  broadcastStatus();
+
+  let problemsBySlug = new Map();
+  try {
+    const masterListRes = await fetch("https://leetroulette.vercel.app/data/all_problems.json");
+    if (masterListRes.ok) {
+      const allProblems = await masterListRes.json();
+      problemsBySlug = new Map(allProblems.map((p) => [p.slug, p]));
+    }
+  } catch (err) {
+    console.warn("Failed to fetch master problem list:", err);
+  }
+
+  const results = [];
   const QUESTION_DATA_QUERY = `
     query questionData($titleSlug: String!) {
       question(titleSlug: $titleSlug) {
@@ -128,15 +143,34 @@ async function startSyncProcess() {
     }
   `;
 
-  const results = [];
   for (let i = 0; i < uniqueSlugs.length; i++) {
     const sub = uniqueSlugs[i];
     
-    const percent = 10 + Math.floor(((i + 1) / uniqueSlugs.length) * 85);
+    // First try our instant database
+    const p = problemsBySlug.get(sub.titleSlug);
+    if (p) {
+      results.push({
+        questionId: p.questionId,
+        title: p.title,
+        slug: p.slug,
+        difficulty: p.difficulty,
+        topics: p.topics,
+        leetcode_url: p.leetcode_url,
+        date_solved: new Date(sub.timestamp * 1000).toISOString(),
+        personal_note: "",
+        pattern: "",
+        times_shown: 0,
+        last_shown: null,
+      });
+      continue;
+    }
+
+    // If not found in our database (e.g. brand new LeetCode problem), fallback to slow GraphQL
+    const percent = 60 + Math.floor(((i + 1) / uniqueSlugs.length) * 35);
     syncStatus = { 
       type: "SYNC_PROGRESS", 
       percent, 
-      detail: `Processing problem ${i + 1} of ${uniqueSlugs.length}...` 
+      detail: `Fetching missing details for ${sub.titleSlug}...` 
     };
     broadcastStatus();
 
