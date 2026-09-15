@@ -45,15 +45,23 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const customData = loadUserData();
-    if (customData) {
-      setAllProblems(customData);
-      setTopics(extractAllTopics(customData));
-      setIsDemoMode(false);
-      setLoading(false);
-    } else {
-      loadDefaultData();
-    }
+    const loadData = () => {
+      const customData = loadUserData();
+      if (customData) {
+        setAllProblems(customData);
+        setTopics(extractAllTopics(customData));
+        setIsDemoMode(false);
+        setLoading(false);
+      } else {
+        loadDefaultData();
+      }
+    };
+    
+    loadData();
+
+    const handleSync = () => loadData();
+    window.addEventListener('leetroulette-sync-update', handleSync);
+    return () => window.removeEventListener('leetroulette-sync-update', handleSync);
   }, [loadDefaultData]);
 
   useEffect(() => {

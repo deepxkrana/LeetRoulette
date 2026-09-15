@@ -7,7 +7,7 @@ chrome.storage.local.get(['leetroulette_user_data'], (result) => {
     if (existing !== dataString) {
       window.localStorage.setItem('leetroulette_user_data', dataString);
       setTimeout(() => {
-        window.location.reload();
+        window.dispatchEvent(new CustomEvent('leetroulette-sync-update'));
       }, 100);
     }
   }
@@ -20,6 +20,6 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
       'leetroulette_user_data', 
       JSON.stringify(changes.leetroulette_user_data.newValue)
     );
-    window.location.reload();
+    window.dispatchEvent(new CustomEvent('leetroulette-sync-update'));
   }
 });

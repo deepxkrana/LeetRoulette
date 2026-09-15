@@ -19,9 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     chrome.tabs.query({}, (tabs) => {
       const existingTab = tabs.find(t => t.url && (t.url.includes("localhost:5173") || t.url.includes("leetroulette.vercel.app") || t.url.includes("leetroulette.com")));
       if (existingTab) {
-        // Just reload the tab since the background script might have already injected data, 
-        // or we rely on the content script executing on reload
-        chrome.tabs.reload(existingTab.id);
+        // Just focus the tab, the content script handles live updates without reloading
         chrome.tabs.update(existingTab.id, { active: true });
         chrome.windows.update(existingTab.windowId, { focused: true });
       } else {
